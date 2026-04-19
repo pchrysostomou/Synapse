@@ -87,7 +87,6 @@
 | **Authentication** | Supabase Auth | Google OAuth + Email/Password |
 | **AI** | Groq API (Llama 3.3 70B) | Fast inference, free tier, streaming |
 | **Styling** | Tailwind CSS | Utility-first, dark glassmorphism design |
-| **State** | Zustand | Lightweight client state management |
 
 ---
 
