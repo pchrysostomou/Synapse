@@ -46,30 +46,22 @@
 │  └── AI Modal ─────────────────── Groq API (streaming)           │
 │                    │                        │                     │
 │            SocketIOProvider           fetch /api/ai               │
-└────────────────────┼───────────────────────┼─────────────────────┘
-                     │ WebSocket              │ HTTPS
-                     ▼                        ▼
-┌────────────────────────────┐  ┌─────────────────────────────────┐
-│  Socket.io Server          │  │  Next.js API Routes             │
-│  (Node.js :3001)           │  │  /api/ai/complete               │
-│                            │  │       │                          │
-│  • Y.js room management    │  │  Groq SDK (Llama 3.3 70B)       │
-│  • CRDT update relay       │  │  Streaming text response        │
-│  • Awareness broadcast     │  └─────────────────────────────────┘
-└──────────────┬─────────────┘
-               │ persist content
-               ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  Supabase (PostgreSQL + Auth + RLS)                              │
-│                                                                   │
-│  documents    document_shares    profiles    auth.users          │
-│  ─────────    ───────────────    ────────    ──────────          │
-│  id           document_id        id          id                  │
-│  title        shared_with_id     full_name   email               │
-│  content      permission         avatar_url  provider            │
-│  owner_id     ─────────────      ─────────   ─────────           │
-│  is_public                                                        │
-└─────────────────────────────────────────────────────────────────┘
+│                    │                        │                     │
+│            (Y.js updates)          (stream response)             │
+│                    │                                              │
+│            autosave (debounced) ──────────────────────────────┐  │
+└────────────────────┼──────────────────────────────────────────┼──┘
+                     │ WebSocket              │ HTTPS             │ HTTPS
+                     ▼                        ▼                   ▼
+┌────────────────────────────┐  ┌───────────────────┐  ┌────────────────────┐
+│  Socket.io Server          │  │  Next.js API      │  │  Supabase          │
+│  (Node.js :3001)           │  │  /api/ai/complete │  │  (PostgreSQL)      │
+│                            │  │       │           │  │                    │
+│  • Y.js room management    │  │  Groq SDK         │  │  documents table   │
+│  • CRDT update relay       │  │  Llama 3.3 70B    │  │  + Auth + RLS      │
+│  • Awareness broadcast     │  │  Streaming text   │  │                    │
+│  • In-memory Y.Doc state   │  └───────────────────┘  └────────────────────┘
+└────────────────────────────┘
 ```
 
 ---
@@ -83,7 +75,7 @@
 | **Editor** | TipTap (ProseMirror) | Extensible rich text, Y.js integration |
 | **Real-time sync** | Y.js (CRDT) | Conflict-free concurrent editing, offline support |
 | **WebSocket server** | Socket.io (Node.js) | Room management, Y.js update relay |
-| **Database** | Supabase (PostgreSQL) | Auth, RLS policies, real-time subscriptions |
+| **Database** | Supabase (PostgreSQL) | Auth, RLS policies, document persistence |
 | **Authentication** | Supabase Auth | Google OAuth + Email/Password |
 | **AI** | Groq API (Llama 3.3 70B) | Fast inference, free tier, streaming |
 | **Styling** | Tailwind CSS | Utility-first, dark glassmorphism design |
@@ -101,8 +93,8 @@
 ### 1. Clone & install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/synapse.git
-cd synapse
+git clone https://github.com/pchrysostomou/Synapse.git
+cd Synapse
 npm install
 ```
 
