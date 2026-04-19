@@ -206,14 +206,6 @@ Supabase Row Level Security policies for `document_shares` caused infinite recur
 
 ---
 
-## 📄 License
 
-MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-<div align="center">
-
-Built with ❤️ using Next.js, Y.js, Socket.io, Supabase, and Groq
 
 </div>
