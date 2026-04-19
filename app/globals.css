@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Variables ─────────────────────────────────────────── */
+:root {
+  --bg: #0a0a0f;
+  --bg-subtle: #0f0f17;
+  --bg-surface: #111118;
+  --bg-elevated: #16161f;
+  --border: #1e1e2e;
+  --border-subtle: #16162a;
+  --border-strong: #2a2a3e;
+  --primary: #7c3aed;
+  --primary-hover: #6d28d9;
+  --primary-light: #8b5cf6;
+  --primary-muted: rgba(124, 58, 237, 0.15);
+  --text: #e2e8f0;
+  --text-subtle: #94a3b8;
+  --text-muted: #64748b;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --radius: 0.75rem;
+}
+
+/* ─── Base Reset ────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── Custom Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ─── Focus Ring ────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Selection ─────────────────────────────────────────────── */
+::selection {
+  background: rgba(124, 58, 237, 0.3);
+  color: var(--text);
+}
+
+/* ─── View Transitions ──────────────────────────────────────── */
+@supports (view-transition-name: none) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+}
+
+/* ─── Components ────────────────────────────────────────────── */
+@layer components {
+  /* Glass card effect */
+  .glass {
+    background: rgba(17, 17, 24, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #4f46e5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--bg-surface) 25%,
+      var(--bg-elevated) 50%,
+      var(--bg-surface) 75%
+    );
+    background-size: 200px 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Input base */
+  .input-base {
+    @apply w-full rounded-xl border border-border bg-bg-surface px-4 py-3 text-text placeholder:text-text-muted
+           transition-all duration-200 outline-none
+           focus:border-primary focus:ring-2 focus:ring-primary/20
+           hover:border-border-strong;
+  }
+
+  /* Button primary */
+  .btn-primary {
+    @apply flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white
+           transition-all duration-200 hover:bg-primary-hover active:scale-[0.98]
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Button ghost */
+  .btn-ghost {
+    @apply flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-text-subtle
+           transition-all duration-200 hover:bg-bg-elevated hover:text-text active:scale-[0.98];
+  }
+}
+
+/* ─── TipTap Editor Styles ──────────────────────────────────── */
+.tiptap {
+  @apply outline-none min-h-[calc(100vh-16rem)];
+}
+
+.tiptap p {
+  @apply mb-3 leading-relaxed;
+}
+
+.tiptap h1 {
+  @apply text-3xl font-bold text-text mb-4 mt-6;
+}
+
+.tiptap h2 {
+  @apply text-2xl font-semibold text-text mb-3 mt-5;
+}
+
+.tiptap h3 {
+  @apply text-xl font-semibold text-text mb-2 mt-4;
+}
+
+.tiptap ul,
+.tiptap ol {
+  @apply ml-6 mb-3 space-y-1;
+}
+
+.tiptap ul {
+  @apply list-disc;
+}
+
+.tiptap ol {
+  @apply list-decimal;
+}
+
+.tiptap blockquote {
+  @apply border-l-4 border-primary pl-4 italic text-text-subtle my-4;
+}
+
+.tiptap code {
+  @apply bg-bg-elevated text-primary-light rounded px-1.5 py-0.5 text-sm font-mono;
+}
+
+.tiptap pre {
+  @apply bg-bg-elevated rounded-xl p-4 my-4 overflow-x-auto;
+}
+
+.tiptap pre code {
+  @apply bg-transparent p-0 text-text;
+}
+
+.tiptap hr {
+  @apply border-border my-6;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply text-text-muted pointer-events-none float-left h-0;
+}
+
+.tiptap strong {
+  @apply font-semibold text-text;
+}
+
+/* ─── Y.js Collaboration Cursors ───────────────────────────── */
+/* Custom cursor labels for CollaborationCursor extension */
+.collaboration-cursor__caret {
+  border-left: 2px solid;
+  border-right: none;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+  position: relative;
+  word-break: normal;
+}
+
+.collaboration-cursor__label {
+  border-radius: 3px 3px 3px 0;
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 600;
+  left: -1px;
+  line-height: normal;
+  padding: 2px 6px;
+  position: absolute;
+  top: -1.6em;
+  user-select: none;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.tiptap:focus-within .collaboration-cursor__label,
+.collaboration-cursor__caret:hover .collaboration-cursor__label {
+  opacity: 1;
+}
+
+/* Always show cursor labels on hover */
+.collaboration-cursor__caret:hover .collaboration-cursor__label {
+  opacity: 1;
+}
